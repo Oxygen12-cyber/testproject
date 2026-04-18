@@ -1,4 +1,9 @@
 import requests
+from fastapi import FastAPI
+
+
+app = FastAPI()
+
 
 def fetch_posts():
     url = "https://jsonplaceholder.typicode.com/posts"
@@ -9,15 +14,12 @@ def fetch_posts():
         posts = response.json()
         print(f"Successfully fetched {len(posts)} posts.\n")
         print("Here are the first 5 posts:\n" + "-"*40)
-        
-        for post in posts[:5]:
-            print(f"ID: {post.get('id')}")
-            print(f"Title: {post.get('title')}")
-            print(f"Body: {post.get('body')}")
-            print("-" * 40)
-            
+        return posts
     except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        return f"An error occurred: {e}"
 
-if __name__ == "__main__":
-    fetch_posts()
+@app.get('/')
+def RootPage():
+    return fetch_posts()
+
+
